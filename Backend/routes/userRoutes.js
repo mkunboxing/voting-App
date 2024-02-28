@@ -16,6 +16,7 @@ router.post("/signup", async (req, res) => {
     console.log(JSON.stringify(payload));
     const token = generateToken(payload);
     console.log("token is ", token);
+    res.cookie("token", token);
     res.status(200).json({ response: response, token: token });
   } catch (error) {
     console.error(error);
@@ -44,7 +45,9 @@ router.post("/login", async (req, res) => {
     const token = generateToken(payload);
 
     // resturn token as response
+    res.cookie("token", token)
     res.json({ token });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
