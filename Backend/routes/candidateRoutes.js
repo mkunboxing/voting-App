@@ -72,7 +72,7 @@ router.delete("/:candidateID", jwtAuthMiddleware, async (req, res) => {
       return res.status(404).json({ error: "Candidate not found" });
     }
     console.log("candidate deleted");
-    res.status(200).json({ response: response });
+    res.status(200).json("Candidate deleted");
 
   } catch (err) {
     console.log(err);
@@ -84,6 +84,7 @@ router.delete("/:candidateID", jwtAuthMiddleware, async (req, res) => {
 
 router.post('/vote/:candidateID', jwtAuthMiddleware, async (req, res) => {
   try {
+    
     const candidateID = req.params.candidateID;
     const userID = req.user.id;
 
@@ -125,6 +126,7 @@ router.post('/vote/:candidateID', jwtAuthMiddleware, async (req, res) => {
 
   router.get('/vote/count', jwtAuthMiddleware, async (req, res) => {
     try {
+      
       const candidate = await Candidate.find().sort({ voteCount: 'desc' });
       
       // map the candidates to only return their name and voteCount
