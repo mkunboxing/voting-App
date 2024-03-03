@@ -17,7 +17,9 @@ const checkAdminRole = async (userID)=>{
   }
 }
 
-router.post("/", jwtAuthMiddleware, async (req, res) => {
+
+
+router.post("/add", jwtAuthMiddleware, async (req, res) => {
   try {
     if(! await checkAdminRole(req.user.id)){
       return res.status(401).json({ error: "Unauthorized" });
@@ -32,6 +34,16 @@ router.post("/", jwtAuthMiddleware, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/list", async (req, res) => {
+  try {
+    const candidates = await Candidate.find();
+    res.status(200).json({ response: candidates });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -126,7 +138,9 @@ router.post('/vote/:candidateID', jwtAuthMiddleware, async (req, res) => {
 
   router.get('/vote/count', jwtAuthMiddleware, async (req, res) => {
     try {
-      
+      if(! await checkAdminRole(req.user.id)){
+        return res.status(401).json({ error: "Unauthorized" });
+      }
       const candidate = await Candidate.find().sort({ voteCount: 'desc' });
       
       // map the candidates to only return their name and voteCount

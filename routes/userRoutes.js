@@ -44,8 +44,6 @@ router.post("/login", async (req, res) => {
     };
     const token = generateToken(payload);
 
-    // resturn token as response
-    res.cookie("token", token)
     res.json({ token });
 
   } catch (err) {

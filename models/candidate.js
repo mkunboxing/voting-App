@@ -4,10 +4,12 @@ const candidateSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     party: {
         type: String,
         required: true,
+        unique: true,
     },
     age: {
         type: Number,
