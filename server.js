@@ -5,9 +5,9 @@ require('dotenv').config();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://india-gov-election-voting.vercel.app'],
   optionsSuccessStatus: 200,
-  credentials : true // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 const PORT = process.env.PORT || 8000;
