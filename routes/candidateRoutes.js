@@ -48,6 +48,27 @@ router.get("/list", async (req, res) => {
 });
 
 
+router.get("/:candidateID", async (req, res) => {
+  try {
+    // if(!checkAdminRole(req.user.id)){
+    //   return res.status(403).json({ error: "Unauthorized" });
+    // }
+    const candidateID = req.params.candidateID;
+    
+    const candidates = await Candidate.findById(candidateID);
+
+    if (!candidates) {
+      return res.status(404).json({ error: "Candidate not found" });
+    }
+    res.status(200).json({ response: candidates });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 router.put("/:candidateID", jwtAuthMiddleware, async (req, res) => {
   try {
     if(!checkAdminRole(req.user.id)){
@@ -136,16 +157,17 @@ router.post('/vote/:candidateID', jwtAuthMiddleware, async (req, res) => {
 
   // vote count route
 
-  router.get('/vote/count', jwtAuthMiddleware, async (req, res) => {
+  router.get('/vote/count', async (req, res) => {
     try {
-      if(! await checkAdminRole(req.user.id)){
-        return res.status(401).json({ error: "Unauthorized" });
-      }
+      // if(! await checkAdminRole(req.user.id)){
+      //   return res.status(401).json({ error: "Unauthorized" });
+      // }
       const candidate = await Candidate.find().sort({ voteCount: 'desc' });
       
       // map the candidates to only return their name and voteCount
       const voteRecord = candidate.map((data) => {
         return {
+          name: data.name,
           party: data.party,
           count: data.voteCount,
         };
